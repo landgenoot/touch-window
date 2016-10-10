@@ -11,7 +11,12 @@ angular.module('myApp', [
 config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
   $locationProvider.hashPrefix('!');
 
-  $routeProvider.otherwise({redirectTo: '/view1'});
+  $routeProvider
+    .when('/window/:id',{
+      templateUrl:'view1/view1.html',
+      controller: 'View1Ctrl'
+    })
+    .otherwise({redirectTo: '/view1'});
 }])
 .config(function($mdThemingProvider) {
   $mdThemingProvider.theme('default')

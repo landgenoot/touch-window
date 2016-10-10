@@ -9,7 +9,7 @@ angular.module('myApp.view1', ['ngRoute'])
   });
 }])
 
-.controller('View1Ctrl', ['$scope', '$mdToast', function($scope, $mdToast) {
+.controller('View1Ctrl', ['$scope', '$mdToast', '$routeParams', '$location', function($scope, $mdToast, $routeParams, $location) {
 
   $scope.showSimpleToast = function() {
     $mdToast.show(
@@ -20,6 +20,8 @@ angular.module('myApp.view1', ['ngRoute'])
   };
 
   $scope.onTouchmove = function($event) {
+
+    console.log($routeParams.id);
 
     var update = {
       id: 1,
@@ -35,5 +37,12 @@ angular.module('myApp.view1', ['ngRoute'])
       update.fingers.push(finger);
     }
   }
+
+  $scope.$on('$viewContentLoaded', function() {
+    if ($routeParams.id === undefined) {
+      var hash = Math.random().toString(36).substring(15).toUpperCase();
+      $location.path('/window/' + hash)
+    }
+  });
 
 }]);
