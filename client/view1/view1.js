@@ -11,6 +11,9 @@ angular.module('myApp.view1', ['ngRoute'])
 
 .controller('View1Ctrl', ['$scope', '$mdToast', '$routeParams', '$location', 'socket', '$interval', 'vibrator', function($scope, $mdToast, $routeParams, $location, socket, $interval, vibrator) {
 
+
+  $scope.url = window.location.href;
+
   $scope.fingers = [];
   for (var i = 0; i < 10; i++) {
     $scope.fingers.push({visible: false});
@@ -48,7 +51,7 @@ angular.module('myApp.view1', ['ngRoute'])
       for (var i = 0; i < $scope.fingers.length; i++) {
         for (var j = 0; $event.changedTouches.length; i++) {
           if ($scope.fingers[i].visible && Math.abs($event.touches[i].clientX - $scope.fingers[i].x) < 25 && Math.abs($event.touches[i].clientY - $scope.fingers[i].y) < 25 ) {
-            vibrator.vibrate(33);
+            vibrator.vibrate(300);
           }
         }
       }
