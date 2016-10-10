@@ -1,7 +1,18 @@
+<md-toolbar>
+  <div class="md-toolbar-tools">
+    <h2>
+      <span>Touch-window</span>
+    </h2>
+    <span flex></span>
+    <md-button class=" md-mini" aria-label="Favorite" ng-click="showSimpleToast()" class="btn" data-clipboard-text="http://28.48.221.33/#a93kt2">
+      <md-icon md-svg-icon="img/icons/share.svg"></md-icon>
+    </md-button>
+  </div>
+</md-toolbar>
 
 <div class="canvas-container">
-  <md-card class="canvas">
-    <md-card-content >
+  <md-card class="canvas" ng-touchmove="onTouchmove($event)">
+    <md-card-content>
     </md-card-content>
   </md-card>
 </div>

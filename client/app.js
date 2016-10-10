@@ -5,7 +5,8 @@ angular.module('myApp', [
   'ngRoute',
   'myApp.view1',
   'myApp.version',
-  'ngMaterial'
+  'ngMaterial',
+  'ngTouch'
 ]).
 config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
   $locationProvider.hashPrefix('!');
@@ -15,12 +16,9 @@ config(['$locationProvider', '$routeProvider', function($locationProvider, $rout
 .config(function($mdThemingProvider) {
   $mdThemingProvider.theme('default')
     .primaryPalette('red')
-    .accentPalette('deep-orange');
+    .accentPalette('deep-orange')
+    .backgroundPalette('grey');
 
-
-  $mdThemingProvider.enableBrowserColor({
-    theme: 'default', // Default is 'default'
-    palette: 'primary', // Default is 'primary', any basic material palette and extended palettes are available
-    hue: '1000' // Default is '800'
-  });
 });
+
+new Clipboard('.md-button');

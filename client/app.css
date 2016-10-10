@@ -28,3 +28,7 @@
 .canvas {
   height: calc(100vh - 80px);
 }
+
+.md-light {
+  color: #fff;
+}
