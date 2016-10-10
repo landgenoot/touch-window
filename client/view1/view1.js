@@ -9,7 +9,7 @@ angular.module('myApp.view1', ['ngRoute'])
   });
 }])
 
-.controller('View1Ctrl', ['$scope', '$mdToast', '$routeParams', '$location', 'socket', '$interval', function($scope, $mdToast, $routeParams, $location, socket, $interval) {
+.controller('View1Ctrl', ['$scope', '$mdToast', '$routeParams', '$location', 'socket', '$interval', 'vibrator', function($scope, $mdToast, $routeParams, $location, socket, $interval, vibrator) {
 
   $scope.fingers = [];
   for (var i = 0; i < 10; i++) {
@@ -25,6 +25,7 @@ angular.module('myApp.view1', ['ngRoute'])
   };
 
   $scope.onTouchmove = function($event) {
+
     // Max 30fps
     if (new Date().getTime() > $scope.lastEvent + 33 || $scope.lastEvent === undefined) {
       var update = {
@@ -42,6 +43,15 @@ angular.module('myApp.view1', ['ngRoute'])
       }
       socket.emit('move', update);
       $scope.lastEvent = new Date().getTime();
+
+      // Check match
+      for (var i = 0; i < $scope.fingers.length; i++) {
+        for (var j = 0; $event.changedTouches.length; i++) {
+          if ($scope.fingers[i].visible && Math.abs($event.touches[i].clientX - $scope.fingers[i].x) < 25 && Math.abs($event.touches[i].clientY - $scope.fingers[i].y) < 25 ) {
+            vibrator.vibrate(33);
+          }
+        }
+      }
     }
   };
 

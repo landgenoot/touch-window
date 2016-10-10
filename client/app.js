@@ -7,7 +7,8 @@ angular.module('myApp', [
   'myApp.version',
   'ngMaterial',
   'ngTouch',
-  'btford.socket-io'
+  'btford.socket-io',
+  'angular-vibrator'
 ]).
 config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
   $locationProvider.hashPrefix('!');
