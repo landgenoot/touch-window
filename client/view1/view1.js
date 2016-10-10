@@ -9,7 +9,12 @@ angular.module('myApp.view1', ['ngRoute'])
   });
 }])
 
-.controller('View1Ctrl', ['$scope', '$mdToast', '$routeParams', '$location', function($scope, $mdToast, $routeParams, $location) {
+.controller('View1Ctrl', ['$scope', '$mdToast', '$routeParams', '$location', 'socket', '$interval', function($scope, $mdToast, $routeParams, $location, socket, $interval) {
+
+  $scope.fingers = [];
+  for (var i = 0; i < 10; i++) {
+    $scope.fingers.push({visible: false});
+  }
 
   $scope.showSimpleToast = function() {
     $mdToast.show(
@@ -20,29 +25,55 @@ angular.module('myApp.view1', ['ngRoute'])
   };
 
   $scope.onTouchmove = function($event) {
-
-    console.log($routeParams.id);
-
-    var update = {
-      id: 1,
-      fingers: []
-    };
-
-    var finger;
-    for (var i = 0; i < $event.changedTouches.length; i++) {
-      finger = {
-        x: $event.touches[i].clientX/($event.target.scrollWidth+$event.target.offsetLeft),
-        y: $event.touches[i].clientY/($event.target.scrollHeight+$event.target.offsetTop),
+    // Max 30fps
+    if (new Date().getTime() > $scope.lastEvent + 33 || $scope.lastEvent === undefined) {
+      var update = {
+        id: $routeParams.id,
+        fingers: []
       };
-      update.fingers.push(finger);
+
+      var finger;
+      for (var i = 0; i < $event.changedTouches.length; i++) {
+        finger = {
+          x: $event.touches[i].clientX / ($event.target.scrollWidth + $event.target.offsetLeft),
+          y: $event.touches[i].clientY / ($event.target.scrollHeight + $event.target.offsetTop),
+        };
+        update.fingers.push(finger);
+      }
+      socket.emit('move', update);
+      $scope.lastEvent = new Date().getTime();
     }
-  }
+  };
 
   $scope.$on('$viewContentLoaded', function() {
+    var target = document.getElementsByClassName("canvas-container")[0];
     if ($routeParams.id === undefined) {
-      var hash = Math.random().toString(36).substring(15).toUpperCase();
-      $location.path('/window/' + hash)
+      var hash = Math.random().toString(36).substring(12).toUpperCase();
+      $location.path('/window/' + String(hash));
+    } else {
+      socket.on('move', function (data) {
+        if (data.id == $routeParams.id) {
+          var i = 0;
+          for (i; i < data.fingers.length; i++) {
+            $scope.fingers[i].x = Math.round(data.fingers[i].x*(target.scrollWidth+target.offsetLeft));
+            $scope.fingers[i].y = Math.round(data.fingers[i].y*(target.scrollHeight+target.offsetTop));
+            $scope.fingers[i].visible = true;
+            $scope.fingers[i].lastSeen = new Date().getTime();
+          }
+        }
+      });
     }
   });
+
+  $interval(function() {
+    for (var i = 0; i < 10; i++) {
+      if ($scope.fingers[i].lastSeen + 1000 < new Date().getTime()) {
+        $scope.fingers[i].visible = false;
+      }
+    }
+  }, 100);
+
+
+
 
 }]);

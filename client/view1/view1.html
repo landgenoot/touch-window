@@ -13,6 +13,7 @@
 <div class="canvas-container">
   <md-card class="canvas" ng-touchmove="onTouchmove($event)">
     <md-card-content>
+      <div class="finger" ng-repeat="i in fingers track by $index" style="top: {{fingers[$index].y}}px; left: {{fingers[$index].x}}px; transition:all 0.1s linear; display: {{fingers[$index].visible ? 'inline' : 'none'}}">&nbsp;</div>
     </md-card-content>
   </md-card>
 </div>

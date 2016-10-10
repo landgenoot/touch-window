@@ -6,7 +6,8 @@ angular.module('myApp', [
   'myApp.view1',
   'myApp.version',
   'ngMaterial',
-  'ngTouch'
+  'ngTouch',
+  'btford.socket-io'
 ]).
 config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
   $locationProvider.hashPrefix('!');
@@ -24,6 +25,9 @@ config(['$locationProvider', '$routeProvider', function($locationProvider, $rout
     .accentPalette('deep-orange')
     .backgroundPalette('grey');
 
+}).
+factory('socket', function (socketFactory) {
+  return socketFactory();
 });
 
 new Clipboard('.md-button');
